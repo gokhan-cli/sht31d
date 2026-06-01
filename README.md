@@ -122,3 +122,5 @@ Eğer verileri Grafana üzerinden görselleştiriyorsanız, yüksek performans v
 
 * 
 **Isıtıcı Durumu:** Isıtıcının çalıştığı anlardaki sıcaklık sıçramalarını anlamlandırabilmek için "State Timeline" paneli ekleyerek `heater` durumunu yeşil/kırmızı izleyin.
+
+<img width="974" height="565" alt="image" src="https://github.com/user-attachments/assets/3a481a98-7fdf-450a-951d-df7c62341f98" />
