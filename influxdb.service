@@ -1,0 +1,15 @@
+[Unit]
+Description="Verileri InfluxDB'ye Yolla"
+After=network.target
+
+[Service]
+User=root
+Environment="HOME=/home/ubuntu"
+WorkingDirectory=/opt/influxdb
+ExecStart=/usr/bin/python3 -u /opt/influxdb/app.py
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
