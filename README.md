@@ -112,6 +112,35 @@ sudo systemctl start influxdb.service webui.service
 
 ```
 
+## 📡 SNMP (Zabbix, PRTG, SolarWinds) Entegrasyonu
+
+Bu proje, endüstriyel ağ izleme yazılımlarına kolayca entegre edilebilmesi için `Net-SNMP` üzerinden dışa aktarılabilir (extendable) bir yapıya sahiptir. Veriler SD kartı yıpratmamak adına `/dev/shm/` (RAM Disk) üzerinden JSON formatında anlık olarak servis edilir.
+
+**1. SNMP Servisini Kurun:**
+\`\`\`bash
+sudo apt-get update && sudo apt-get install snmpd
+\`\`\`
+
+**2. snmpd.conf Dosyasını Yapılandırın:**
+`/etc/snmp/snmpd.conf` dosyasını açın ve en alt satırına aşağıdaki komutları ekleyin (Dosya yollarını kendi proje dizininize göre güncelleyin):
+
+\`\`\`text
+# SHT31D Weather Station SNMP Extensions
+extend sht31d_temp /usr/bin/python3 /opt/influxdb/snmp_bridge.py temp
+extend sht31d_hum /usr/bin/python3 /opt/influxdb/snmp_bridge.py humidity
+extend sht31d_hi /usr/bin/python3 /opt/influxdb/snmp_bridge.py heat_index
+extend sht31d_heater /usr/bin/python3 /opt/influxdb/snmp_bridge.py heater
+\`\`\`
+
+**3. Servisi Yeniden Başlatın ve Test Edin:**
+\`\`\`bash
+sudo systemctl restart snmpd
+\`\`\`
+Artık herhangi bir SNMP istemcisinden aşağıdaki gibi sorgu yapabilirsiniz. Çıktıda sensör verisini doğrudan göreceksiniz:
+\`\`\`bash
+snmpwalk -v2c -c public localhost 'NET-SNMP-EXTEND-MIB::nsExtendOutLine."sht31d_temp".1'
+\`\`\`
+
 ### 4. Grafana Optimizasyonu (İsteğe Bağlı)
 
 Eğer verileri Grafana üzerinden görselleştiriyorsanız, yüksek performans ve mobil uyumluluk için şu adımları izlemeniz tavsiye edilir:
