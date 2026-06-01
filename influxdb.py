@@ -3,18 +3,21 @@ import adafruit_sht31d
 import time
 import math
 import os
+import json # SNMP JSON Cache için eklendi
 from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from datetime import datetime
 
 load_dotenv()
+
 # INFLUX_URL = INFLUXDB nin kurulu olduğu ip adresini yazıyorum.
 INFLUX_URL = "http://192.168.9.5:8086"
 INFLUX_TOKEN = os.getenv("INFLUX_TOKEN")
 
 if not INFLUX_TOKEN:
     raise ValueError("KRİTİK HATA: INFLUX_TOKEN .env dosyasında bulunamadı!")
+
 # BUCKET = verilerin aktarılacağı yeri belirtiyorum.
 ORG = "IOT"
 BUCKET = "sensordata"
@@ -85,6 +88,25 @@ def calculate_heat_index_accurate(T_celsius, RH):
 
     return (HI - 32) * 5 / 9
 
+# --- SNMP RAM Disk Cache Fonksiyonu ---
+def update_state_file(temp, humidity, heat_index, heater_status):
+    state_file = "/dev/shm/sht31d_state.json"
+    
+    # Veri None ise 0.0 olarak kaydet (SNMP tarafında hata olmaması için)
+    data = {
+        "temperature": round(temp, 2) if temp is not None else 0.0,
+        "humidity": round(humidity, 2) if humidity is not None else 0.0,
+        "heat_index": round(heat_index, 2) if heat_index is not None else 0.0,
+        "heater_status": int(heater_status)
+    }
+    
+    try:
+        with open(state_file + ".tmp", "w") as f:
+            json.dump(data, f)
+        os.rename(state_file + ".tmp", state_file)
+    except Exception:
+        pass # RAM diske yazılamazsa ana akışı bozma
+
 # --- Ana Döngü ---
 try:
     while True:
@@ -116,12 +138,18 @@ try:
         else:
             print("Veri gönderilmedi: Geçerli ölçüm yok.")
 
+        # --- RAM Diski Güncelle (SNMP İçin) ---
+        update_state_file(avg_temp, avg_hum, heat_index, heater_status)
+
         # Isıtıcı döngüsü kontrolü
         if loop_counter >= HEATER_CYCLE:
             try:
                 print("Isıtıcı AÇIK")
                 sensor.heater = True
                 heater_status = 1
+                
+                # RAM Diski ısıtıcı açıkken de anında güncelle
+                update_state_file(avg_temp, avg_hum, heat_index, heater_status)
 
                 point_on = (
                     Point("environment")
@@ -143,6 +171,9 @@ try:
                 sensor.heater = False
                 heater_status = 0
                 print("Isıtıcı KAPALI")
+                
+                # RAM Diski ısıtıcı kapandıktan sonra tekrar güncelle
+                update_state_file(avg_temp, avg_hum, heat_index, heater_status)
 
                 point_off = (
                     Point("environment")
