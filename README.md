@@ -135,8 +135,7 @@ view   systemonly  included   .1.3.6.1.4.1.65943.3.4 # Heat Index
 view   systemonly  included   .1.3.6.1.4.1.65943.4.4 # Heater ON/OFF State
 ```
 
-`Aynı dosyanın içine en alt satıra aşağıdaki komutları ekleyin (Dosya yollarını kendi proje dizininize göre güncelleyin):
-
+Aynı dosyanın içine en alt satıra aşağıdaki komutları ekleyin (Dosya yollarını kendi proje dizininize göre güncelleyin):
 ```text
 # SHT31D Weather Station SNMP Extensions
 extend .1.3.6.1.4.1.65943.1 sht31d_temp /usr/bin/python3 /opt/influxdb/snmp_bridge.py temp
