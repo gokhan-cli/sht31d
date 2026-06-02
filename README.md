@@ -128,7 +128,7 @@ sudo apt-get update && sudo apt-get install snmpd
 #  system + hrSystem groups only
 view   systemonly  included   .1.3.6.1.2.1.1
 view   systemonly  included   .1.3.6.1.2.1.25.1
-view   systemonly  excluded   .1.3.6.1.4.1.65943 # Eklenecek
+view   systemonly  excluded   .1.3.6.1.4.1.65943 # SNMP güvenliği için exclude edilecek.
 view   systemonly  included   .1.3.6.1.4.1.65943.1.4 # Temperature
 view   systemonly  included   .1.3.6.1.4.1.65943.2.4 # Humidity
 view   systemonly  included   .1.3.6.1.4.1.65943.3.4 # Heat Index
