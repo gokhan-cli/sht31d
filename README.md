@@ -122,7 +122,7 @@ sudo apt-get update && sudo apt-get install snmpd
 ```
 
 **2. snmpd.conf Dosyasını Yapılandırın:**
-`/etc/snmp/snmpd.conf` dosyasını açın ve .1.3.6.1.4.1.65943 ve altındakileri ilgili alana ekleyin.
+`/etc/snmp/snmpd.conf` dosyasını açın ve .1.3.6.1.4.1.65943 ve altındakileri ilgili alana ekleyin:
 
 ```text
 #  system + hrSystem groups only
