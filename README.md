@@ -122,14 +122,27 @@ sudo apt-get update && sudo apt-get install snmpd
 ```
 
 **2. snmpd.conf Dosyasını Yapılandırın:**
-`/etc/snmp/snmpd.conf` dosyasını açın ve en alt satırına aşağıdaki komutları ekleyin (Dosya yollarını kendi proje dizininize göre güncelleyin):
+`/etc/snmp/snmpd.conf` dosyasını açın ve .1.3.6.1.4.1.65943 ve altındakileri ilgili alana ekleyin.
+
+```text
+#  system + hrSystem groups only
+view   systemonly  included   .1.3.6.1.2.1.1
+view   systemonly  included   .1.3.6.1.2.1.25.1
+view   systemonly  excluded   .1.3.6.1.4.1.65943 # Eklenecek
+view   systemonly  included   .1.3.6.1.4.1.65943.1.4 # Temperature
+view   systemonly  included   .1.3.6.1.4.1.65943.2.4 # Humidity
+view   systemonly  included   .1.3.6.1.4.1.65943.3.4 # Heat Index
+view   systemonly  included   .1.3.6.1.4.1.65943.4.4 # Heater ON/OFF State
+```
+
+`Aynı dosyanın içine en alt satıra aşağıdaki komutları ekleyin (Dosya yollarını kendi proje dizininize göre güncelleyin):
 
 ```text
 # SHT31D Weather Station SNMP Extensions
-extend sht31d_temp /usr/bin/python3 /opt/influxdb/snmp_bridge.py temp
-extend sht31d_hum /usr/bin/python3 /opt/influxdb/snmp_bridge.py humidity
-extend sht31d_hi /usr/bin/python3 /opt/influxdb/snmp_bridge.py heat_index
-extend sht31d_heater /usr/bin/python3 /opt/influxdb/snmp_bridge.py heater
+extend .1.3.6.1.4.1.65943.1 sht31d_temp /usr/bin/python3 /opt/influxdb/snmp_bridge.py temp
+extend .1.3.6.1.4.1.65943.2 sht31d_hum /usr/bin/python3 /opt/influxdb/snmp_bridge.py humidity
+extend .1.3.6.1.4.1.65943.3 sht31d_hi /usr/bin/python3 /opt/influxdb/snmp_bridge.py heat_index
+extend .1.3.6.1.4.1.65943.4 sht31d_heater /usr/bin/python3 /opt/influxdb/snmp_bridge.py heater
 ```
 
 **3. Servisi Yeniden Başlatın ve Test Edin:**
