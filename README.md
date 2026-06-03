@@ -1,6 +1,6 @@
-# 🌡️ RPi3 SHT31D Endüstriyel IoT Hava İstasyonu
+# 🌡️ RPi SHT31D Endüstriyel IoT Hava İstasyonu
 
-Bu proje, Raspberry Pi 3 ve yüksek hassasiyetli Adafruit SHT31D sensörü kullanılarak geliştirilmiş, 7/24 kesintisiz çalışmak üzere tasarlanmış endüstriyel düzeyde bir IoT veri toplama ve izleme sistemidir. Sistem; donanım, ağ ve yazılım katmanlarında tam otonom hata yönetimi yaparken, verileri InfluxDB'ye kaydeder ve "E-Mürekkep (E-Ink) / Gazete Kağıdı" temalı özel bir web arayüzü ile anlık olarak sunar.
+Bu proje, Raspberry Pi ve yüksek hassasiyetli Adafruit SHT31D sensörü kullanılarak geliştirilmiş, 7/24 kesintisiz çalışmak üzere tasarlanmış endüstriyel düzeyde bir IoT veri toplama ve izleme sistemidir. Sistem; donanım, ağ ve yazılım katmanlarında tam otonom hata yönetimi yaparken, verileri InfluxDB'ye kaydeder ve "E-Mürekkep (E-Ink) / Gazete Kağıdı" temalı özel bir web arayüzü ile anlık olarak sunar.
 
 ## ✨ Öne Çıkan Özellikler
 
